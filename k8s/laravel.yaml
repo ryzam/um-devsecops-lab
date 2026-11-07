@@ -1,0 +1,53 @@
+# Manifest SENGAJA tidak selamat: sasaran latihan IaC (Hari 3).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: laravel-app
+  namespace: lab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: laravel-app
+  template:
+    metadata:
+      labels:
+        app: laravel-app
+    spec:
+      hostNetwork: true
+      containers:
+        - name: app
+          image: laravel-app:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          securityContext:
+            privileged: true
+            runAsUser: 0
+            allowPrivilegeEscalation: true
+          env:
+            - name: APP_DEBUG
+              value: "true"
+            - name: PAYMENT_API_KEY
+              value: "Rk4pQ7xVn2LmZ8tYb5Hc3JdW"
+          volumeMounts:
+            - name: docker-sock
+              mountPath: /var/run/docker.sock
+      volumes:
+        - name: docker-sock
+          hostPath:
+            path: /var/run/docker.sock
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: laravel-app
+  namespace: lab
+spec:
+  type: NodePort
+  selector:
+    app: laravel-app
+  ports:
+    - port: 80
+      targetPort: 8080
+      nodePort: 30081

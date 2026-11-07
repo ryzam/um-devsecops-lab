@@ -1,0 +1,51 @@
+# Manifest SENGAJA tidak selamat: sasaran latihan IaC (Hari 3).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aspnet-app
+  namespace: lab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aspnet-app
+  template:
+    metadata:
+      labels:
+        app: aspnet-app
+    spec:
+      hostNetwork: true
+      containers:
+        - name: app
+          image: aspnet-app:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          securityContext:
+            privileged: true
+            runAsUser: 0
+            allowPrivilegeEscalation: true
+          env:
+            - name: Jwt__Secret
+              value: "57fD6LPgVOzIeLPIJBYVdeeJ"
+          volumeMounts:
+            - name: docker-sock
+              mountPath: /var/run/docker.sock
+      volumes:
+        - name: docker-sock
+          hostPath:
+            path: /var/run/docker.sock
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aspnet-app
+  namespace: lab
+spec:
+  type: NodePort
+  selector:
+    app: aspnet-app
+  ports:
+    - port: 80
+      targetPort: 8080
+      nodePort: 30080
