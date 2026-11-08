@@ -6,6 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>AspNetLab</RootNamespace>
     <AssemblyName>AspNetLab</AssemblyName>
+    <!-- Hasilkan packages.lock.json supaya alat SCA (Trivy) dapat membaca versi sebenar dependency -->
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
 
   <ItemGroup>
