@@ -35,6 +35,18 @@ docker run --rm -p 8080:8080 aspnet-app:latest
 
 Buka <http://localhost:8080>.
 
+## Jalankan app (Track B)
+
+Anda tidak perlu memasang PHP atau Composer. Semua berjalan dalam Docker:
+
+```bash
+cd laravel-app
+docker build -t laravel-app:latest .
+docker run --rm -p 8081:8080 laravel-app:latest
+```
+
+Buka <http://localhost:8081>. Binaan pertama mengambil masa beberapa minit kerana Composer memuat turun dependency.
+
 ## Apa yang akan anda lakukan
 
 | Hari | Latihan pada repo ini |
